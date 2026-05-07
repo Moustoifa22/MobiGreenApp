@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi Green Interactif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS & JS (CDN) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+    <!-- Header -->
+    <header class="emerald-gradient text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6 md:py-8">
+            <div class="flex items-center justify-between mb-6">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold">Mobi Green</h1>
+                </div>
+
+                <!-- Padlock Code Display (New) -->
+                <div class="hidden md:flex flex-col items-end gap-1 mr-4">
+                    <p class="text-[10px] text-emerald-200 uppercase tracking-widest font-bold">🔒 Code du Cadenas</p>
+                    <div class="flex gap-1.5" id="cadenasDisplay">
+                        <span class="cadenas-digit" id="digit-0">_</span>
+                        <span class="cadenas-digit" id="digit-1">_</span>
+                        <span class="cadenas-digit" id="digit-2">_</span>
+                        <span class="cadenas-digit" id="digit-3">_</span>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-semibold">Étape</span>
+                    <div class="flex space-x-1" id="progressStepsContainer"></div>
+                </div>
+            </div>
+            <!-- Linear Progress Bar -->
+            <div class="w-full bg-emerald-700 rounded-full h-2.5 mt-4">
+                <div id="linearProgressBar" class="bg-white h-2.5 rounded-full transition-all duration-800 ease-out" style="width: 0%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 md:py-12">
+        <!-- Content Card replaced by interactive map -->
+        <div class="mb-8" id="contentCardContainer">
+            <div class="bg-slate-900/80 border-2 rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto glassmorphism" id="contentCard">
+                <div class="emerald-gradient text-white px-6 py-4">
+                    <h2 class="text-xl md:text-2xl font-bold" id="standTitle">Chargement...</h2>
+                </div>
+                <div class="px-6 py-6">
+                    <p class="text-base text-slate-200 leading-relaxed mb-6" id="standDescription"></p>
+                    
+                    <!-- Progress Label -->
+                    <div class="mb-4">
+                        <span id="progressLabel" class="text-xs text-emerald-400 font-bold uppercase tracking-wider">0 / 4 stands complétés</span>
+                    </div>
+
+                    <div class="h-1 bg-gradient-to-r from-emerald-200 to-emerald-500 rounded-full mb-6"></div>
+                    <div class="relative">
+                        <div id="map" class="rounded-md overflow-hidden"></div>
+                        <!-- Jauge de Batterie sur la carte -->
+                        <div class="absolute top-4 left-1/2 -translate-x-1/2 z-[500] bg-slate-900/80 backdrop-blur-md p-3 rounded-xl border border-white/20 w-40">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[10px] font-bold text-white uppercase">Batterie VAE</span>
+                                <span id="batteryPercentage" class="text-[10px] font-mono text-emerald-400">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                                <div id="batteryBar" class="bg-emerald-500 h-full transition-all duration-1000" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Zone -->
+        <div class="max-w-2xl mx-auto" id="actionZone">
+            <!-- Hint Container (Hidden by default) -->
+            <div id="hintContainer" class="hidden mb-4 bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg shadow-sm">
+                <div class="flex items-center">
+                    <span class="text-amber-500 mr-2">💡</span>
+                    <p id="hintText" class="text-sm text-amber-800 italic"></p>
+                </div>
+            </div>
+            
+            <div class="bg-slate-900/70 border border-emerald-500/30 rounded-lg shadow-md p-6 md:p-8">
+                <div id="quizZone" class="mb-6">
+                    <p id="quizQuestion" class="text-white font-semibold text-base mb-4"></p>
+                    <div id="quizOptions" class="flex flex-col gap-3"></div>
+                </div>
+
+                <div id="feedbackMsg" class="hidden rounded-xl px-4 py-3 text-sm font-medium mb-4"></div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="validateBtn" disabled class="w-full relative emerald-gradient disabled:from-slate-700 disabled:to-slate-800 disabled:bg-none disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center">
+                        <span id="btnText">Valider</span>
+                        <!-- Spinner (caché par défaut) -->
+                        <div id="btnSpinner" class="hidden">
+                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ZONE INVENTAIRE FIXE -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[40] w-full max-w-sm px-4">
+        <div class="glassmorphism rounded-2xl p-4 flex justify-around items-center shadow-2xl border-white/10">
+            <div class="inventory-slot" id="slot-0"><span class="inventory-digit"></span></div>
+            <div class="inventory-slot" id="slot-1"><span class="inventory-digit"></span></div>
+            <div class="inventory-slot" id="slot-2"><span class="inventory-digit"></span></div>
+            <div class="inventory-slot" id="slot-3"><span class="inventory-digit"></span></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white mt-12 pb-28">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p class="text-sm md:text-base mb-6">
+                🚴 Parrainé par le Cycliste Confirmé
+            </p>
+            <button 
+                onclick="resetMobiGreenProgress()" 
+                class="px-6 py-2 border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white rounded-full text-[10px] transition-all uppercase tracking-widest font-bold"
+            >
+                ⚠️ Réinitialiser tout le parcours
+            </button>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-4 w-full max-w-xl px-4 pointer-events-none"></div>
+
+    <!-- MODALE STORY - Narrative de transition -->
+    <div id="storyModal"
+         class="hidden fixed inset-0 z-[9998] flex items-center justify-center p-4"
+         style="background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);">
+           <div id="storyModalBox"
+               class="bg-slate-900 text-slate-100 rounded-3xl shadow-2xl max-w-md w-full p-7 flex flex-col gap-4
+                    animate-story-in relative overflow-hidden">
+            <!-- Texture Arcinking en fond -->
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
+                 style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');"></div>
+
+            <div class="text-5xl text-center" id="storyEmoji">🚩</div>
+            <h3 id="storyTitle"
+                class="text-xl font-black text-slate-100 text-center leading-tight"></h3>
+            <p id="storyText"
+               class="text-sm text-white font-medium text-center leading-relaxed"></p>
+
+            <button id="storyCloseBtn"
+                class="mt-2 w-full emerald-gradient text-white font-bold py-3 rounded-xl
+                       hover:opacity-90 active:scale-95 transition">
+                Commencer →
+            </button>
+        </div>
+    </div>
+
+    <!-- MODALE FINALE CADENAS -->
+    <div id="finalModal" class="fixed inset-0 z-[10000] flex items-center justify-center hidden bg-black/75 backdrop-blur-md p-4">
+      <div class="glassmorphism rounded-3xl p-8 max-w-md w-full text-center animate-story-in border-emerald-500/50">
+        <p class="text-6xl mb-4">🔓</p>
+        <h2 class="text-2xl font-extrabold text-white mb-2">Ouvrez le Cadenas !</h2>
+        <p class="text-slate-100 text-sm mb-6">Saisissez le code à 4 chiffres que Léo t'a confié durant le parcours.</p>
+        <div class="flex gap-3 justify-center mb-6" id="finalCodeInputs">
+          <input type="text" maxlength="1" inputmode="numeric" class="cadenas-input" id="finalInput0" />
+          <input type="text" maxlength="1" inputmode="numeric" class="cadenas-input" id="finalInput1" />
+          <input type="text" maxlength="1" inputmode="numeric" class="cadenas-input" id="finalInput2" />
+          <input type="text" maxlength="1" inputmode="numeric" class="cadenas-input" id="finalInput3" />
+        </div>
+        <div id="finalFeedback" class="hidden rounded-xl px-4 py-3 text-sm font-medium mb-4"></div>
+        <button id="openLockBtn" class="emerald-gradient text-white font-bold py-4 px-8 rounded-2xl w-full shadow-lg shadow-emerald-900/20">
+          🔓 Ouvrir le cadenas
+        </button>
+      </div>
+    </div>
+
+    <div id="victoryModal" class="fixed inset-0 z-[10001] flex items-center justify-center hidden bg-black/85 backdrop-blur-xl p-4">
+      <div class="glassmorphism rounded-3xl p-8 max-w-lg w-full text-center animate-story-in border-emerald-400">
+        <p class="text-5xl mb-4">📊</p>
+        <h2 class="text-2xl font-extrabold text-white mb-1">Dashboard de Transition Écologique</h2>
+        <p class="text-slate-400 text-[10px] uppercase tracking-widest font-bold mb-6">Analyse comparative du trajet CNAM → NB Tech</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-left">
+          <div class="bg-slate-800/50 p-4 rounded-2xl border border-slate-700">
+            <p class="text-[10px] text-slate-500 uppercase font-black mb-3">Trajet Classique (Voiture)</p>
+            <div class="space-y-2">
+              <p class="text-sm text-red-400">💨 <b>580g</b> CO₂ émis</p>
+              <p class="text-sm text-red-400">⏱️ <b>18 min</b> (Bouchons inclus)</p>
+              <p class="text-[10px] text-slate-500 italic">Impact santé : Sédentaire</p>
+            </div>
+          </div>
+          <div class="bg-emerald-900/30 p-4 rounded-2xl border border-emerald-500/50">
+            <p class="text-[10px] text-emerald-400 uppercase font-black mb-3">Solution Mobi'Green (VAE)</p>
+            <div class="space-y-2">
+              <p class="text-sm text-emerald-400">🍃 <b>0g</b> CO₂ (Énergie Solaire)</p>
+              <p class="text-sm text-emerald-400">⏱️ <b>15 min</b> (Temps garanti)</p>
+              <p class="text-[10px] text-emerald-300 font-bold italic">🔥 +120 kcal brûlées</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-emerald-100 text-sm mb-8 leading-relaxed">Le cadenas est ouvert. L'usage du VAE sur ce relief permet un gain de temps de 17% tout en supprimant l'empreinte carbone locale.</p>
+        <button onclick="window.location.reload()" class="emerald-gradient text-white font-bold py-4 px-10 rounded-2xl w-full text-base">
+          ↩ Recommencer l'aventure
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Application Script -->
+    <script src="app.js" defer></script>
+</body>
+</html>

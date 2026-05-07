@@ -1,0 +1,358 @@
+/* Custom Styles for Mobi Green Interactif */
+
+:root {
+    --primary-color: #059669; /* Emerald 600 default */
+    --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+/* Base Font */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.8s ease;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(16,185,129,0.12), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(6,182,212,0.12), transparent 26%),
+        linear-gradient(180deg, #030712 0%, #020617 100%);
+}
+
+/* Theme Overrides */
+.theme-stand-1 { --primary-color: #10b981; --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+.theme-stand-2 { --primary-color: #14b8a6; --primary-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); }
+.theme-stand-3 { --primary-color: #06b6d4; --primary-gradient: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); }
+.theme-stand-4 { --primary-color: #3b82f6; --primary-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+
+.emerald-gradient {
+    background-image: var(--primary-gradient);
+    background-color: var(--primary-color); /* Fallback et aide à la transition */
+    transition: all 0.8s ease;
+}
+
+/* Glassmorphism Effect for Cards */
+.glassmorphism {
+    background-color: rgba(10, 15, 28, 0.92); /* Plus sombre pour le contraste */
+    backdrop-filter: blur(10px) saturate(180%); /* Blur and saturate effect */
+    -webkit-backdrop-filter: blur(10px) saturate(180%); /* Safari support */
+    border: 1px solid rgba(16, 185, 129, 0.4); /* Bordure plus marquée */
+}
+
+/* Force dynamic colors on specific elements */
+#contentCard {
+    border-color: var(--primary-color) !important;
+    transition: border-color 0.8s ease;
+}
+
+#contentCardContainer p,
+#contentCardContainer h2,
+#contentCardContainer h3 {
+    color: #e2e8f0;
+}
+
+.progress-step.active-step {
+    color: var(--primary-color) !important;
+}
+
+/* Slide Transition Classes */
+.content-fade-out {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.4s ease-in;
+}
+
+.content-fade-in {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.content-visible {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.5s ease-out;
+}
+
+/* Shake Animation for Error Feedback */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+    20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.shake-animation {
+    animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Temporary Error Border Color */
+.border-error {
+    border-color: #ef4444 !important; /* Tailwind red-500 */
+}
+
+/* Progress Step Styling */
+.progress-step {
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.progress-step.completed {
+    background-color: #fff;
+    color: #059669; /* emerald-600 */
+    transform: scale(1.1); /* Slight pop on completion */
+}
+
+/* Badge Styling */
+.badge-item {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Map container styling (Leaflet) */
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(5,150,105,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    #map { height: 520px; }
+}
+
+/* Animation de pulsation pour le CO2 */
+@keyframes co2-pulse {
+    0% { fill-opacity: 0.3; stroke-opacity: 0.4; stroke-width: 2; }
+    50% { fill-opacity: 0.6; stroke-opacity: 0.8; stroke-width: 8; }
+    100% { fill-opacity: 0.3; stroke-opacity: 0.4; stroke-width: 2; }
+}
+
+.pulse-layer {
+    animation: co2-pulse 2s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes notify-pop {
+    0% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+    60% { transform: translateY(10px) scale(1.02); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.notification-anim {
+    animation: notify-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+/* ── Stand 1 : Polylignes "cicatrices" animées ── */
+@keyframes cicatrice-pulse {
+  0%   { stroke-opacity: 0.5; stroke-width: 10; }
+  50%  { stroke-opacity: 0.9; stroke-width: 16; }
+  100% { stroke-opacity: 0.5; stroke-width: 10; }
+}
+.cicatrice-rouge path {
+  animation: cicatrice-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Éclosion verte : flash radial au moment du passage au vert ── */
+@keyframes eclosion {
+  0%   { transform: scale(0.5); opacity: 1; }
+  60%  { transform: scale(2.8); opacity: 0.6; }
+  100% { transform: scale(4);   opacity: 0; }
+}
+.eclosion-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #10b981 0%, transparent 70%);
+  pointer-events: none;
+  animation: eclosion 1s ease-out forwards;
+  z-index: 1000;
+}
+
+/* ── Jauge CO2 ── */
+#co2GaugeSection {
+    background: linear-gradient(135deg, rgba(127,29,29,0.25) 0%, rgba(15,23,42,0.8) 100%);
+    border: 1px solid rgba(252,165,165,0.4);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: background 0.8s ease, border-color 0.8s ease;
+}
+#co2GaugeSection.co2-clean {
+    background: linear-gradient(135deg, rgba(6,95,70,0.45) 0%, rgba(15,23,42,0.8) 100%);
+    border-color: rgba(134,239,172,0.6);
+}
+#co2GaugeBar {
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 1s ease;
+}
+#co2Counter {
+  font-variant-numeric: tabular-nums;
+  transition: color 0.8s ease;
+}
+
+/* Animation pour la zone de parking libérée */
+@keyframes zone-verte {
+  0% { fill-opacity: 0.2; }
+  50% { fill-opacity: 0.4; }
+  100% { fill-opacity: 0.2; }
+}
+
+.parking-cleaned {
+  animation: zone-verte 3s infinite ease-in-out;
+  stroke-dasharray: 5, 10;
+}
+
+/* ── Modale Storytelling ── */
+@keyframes story-in {
+    from { transform: scale(0.88) translateY(20px); opacity: 0; }
+    to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+.animate-story-in {
+    animation: story-in 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ── Ligne d'itineraire progressive ── */
+.itineraire-trace {
+    stroke-dasharray: 12 8;
+    stroke-linecap: round;
+    animation: dash-draw 1.5s ease-in-out forwards;
+}
+@keyframes dash-draw {
+    from { stroke-dashoffset: 500; opacity: 0.3; }
+    to   { stroke-dashoffset: 0;   opacity: 1;   }
+}
+
+/* ── Marqueur CESI destination ── */
+.cesi-marker-icon {
+    background: #10b981;
+    border: 3px solid white;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 10px rgba(5,150,105,0.5);
+}
+
+#storyModalBox {
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+/* --- Nouveaux Styles Quiz & Cadenas --- */
+
+.cadenas-digit {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:2.2rem; height:2.5rem;
+  background:rgba(15,23,42,.85); border:2px solid rgba(16,185,129,.35);
+  border-radius:.5rem; font-size:1.2rem; font-weight:800; color:#e2e8f0;
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+}
+.cadenas-digit.revealed {
+  color:#10b981; border-color:#10b981; background:rgba(16,185,129,.12);
+  transform:scale(1.1); box-shadow:0 0 14px rgba(16,185,129,.45);
+  animation:digit-reveal .6s cubic-bezier(.175,.885,.32,1.275) forwards;
+}
+@keyframes digit-reveal {
+  0%{transform:scale(.6) rotateY(90deg);opacity:0}
+  60%{transform:scale(1.2) rotateY(-8deg);opacity:1}
+  100%{transform:scale(1.1) rotateY(0);opacity:1}
+}
+
+.cadenas-input {
+  width:3.2rem; height:3.8rem; text-align:center; font-size:1.8rem; font-weight:800;
+  background:rgba(15,23,42,.9); border:2px solid rgba(16,185,129,.4);
+  border-radius:.75rem; color:#fff; outline:none;
+  transition:all .2s; caret-color:#10b981;
+}
+.cadenas-input:focus { border-color:#10b981; box-shadow:0 0 0 4px rgba(16,185,129,.2); background:rgba(15,23,42,1); }
+.cadenas-input.error { border-color:#ef4444; box-shadow:0 0 0 4px rgba(239,68,68,.2); }
+
+.quiz-option {
+  display:flex; align-items:center; gap:.75rem; padding:.85rem 1.25rem;
+  border-radius:.85rem; border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(15,23,42,.55); cursor:pointer; width:100%;
+  color:#e2e8f0; font-size:.9rem; line-height:1.4; text-align:left;
+  transition:all .2s;
+}
+.quiz-option:hover:not(:disabled) { border-color:rgba(16,185,129,.5); background:rgba(16,185,129,.1); transform:translateX(6px); }
+.quiz-option.selected  { border-color:#10b981; background:rgba(16,185,129,.18); color:#fff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.quiz-option.correct   { border-color:#22c55e; background:rgba(34,197,94,.2);  color:#86efac; }
+.quiz-option.wrong     { border-color:#ef4444; background:rgba(239,68,68,.18);  color:#fca5a5; }
+.quiz-option:disabled  { cursor:not-allowed; opacity:.75; }
+
+.quiz-option-letter {
+  flex-shrink:0; width:1.75rem; height:1.75rem; border-radius:50%;
+  background:rgba(255,255,255,.08); display:flex; align-items:center;
+  justify-content:center; font-size:.75rem; font-weight:800; color:#94a3b8;
+  border:1px solid rgba(255,255,255,.12); transition:all .2s;
+}
+.quiz-option.selected .quiz-option-letter { background:#10b981; color:#fff; border-color:#10b981; }
+.quiz-option.correct  .quiz-option-letter { background:#22c55e; color:#fff; border-color:#22c55e; }
+.quiz-option.wrong    .quiz-option-letter { background:#ef4444; color:#fff; border-color:#ef4444; }
+
+/* --- Inventaire et Batterie --- */
+.inventory-slot {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px dashed rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.inventory-slot.filled {
+    border: 2px solid #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    animation: inventory-pulse 2s infinite;
+}
+
+.inventory-digit {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #10b981;
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+}
+
+@keyframes inventory-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
+    100% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+}
+
+/* Cycliste dans la zone rouge */
+.bike-climbing {
+    transform: scale(1.4) !important;
+    filter: drop-shadow(0 0 8px #ef4444);
+    transition: transform 0.8s ease, filter 0.8s ease;
+}
+
+/* Tooltip relief */
+.relief-tooltip {
+    background: #ef4444;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.relief-tooltip.max-slope {
+    background: #7f1d1d;
+    border: 1px solid #fca5a5;
+    font-size: 12px;
+    z-index: 1000;
+}
+.relief-tooltip:before {
+    border-top-color: #ef4444;
+}
+.relief-tooltip.max-slope:before {
+    border-top-color: #7f1d1d;
+}
