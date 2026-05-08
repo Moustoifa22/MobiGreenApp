@@ -8,12 +8,36 @@
 /* Base Font */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-user-select: none; /* Désactive la sélection de texte style web */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent; /* Supprime le flash gris au clic */
+    -webkit-touch-callout: none; /* Désactive le menu contextuel au clic long */
+    overscroll-behavior-y: none; /* Empêche le "pull-to-refresh" du navigateur */
     transition: background-color 0.8s ease;
     background:
         radial-gradient(circle at 15% 20%, rgba(16,185,129,0.12), transparent 30%),
         radial-gradient(circle at 85% 10%, rgba(6,182,212,0.12), transparent 26%),
         linear-gradient(180deg, #030712 0%, #020617 100%);
 }
+
+/* Réautoriser la sélection dans les champs de saisie */
+input, textarea {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+header {
+    /* Gère le padding pour les encoches (notches) en haut */
+    padding-top: calc(1rem + env(safe-area-inset-top));
+}
+
+.fixed-inventory-container {
+    /* Gère la zone de sécurité en bas (barre de navigation mobile) */
+    bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important;
+}
+
+/* Amélioration du défilement */
+main { -webkit-overflow-scrolling: touch; }
 
 /* Theme Overrides */
 .theme-stand-1 { --primary-color: #10b981; --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%); }

@@ -255,6 +255,24 @@ class MobiGreenManager {
             L.marker(ITINERAIRE.arrivee, { icon: arrivalIcon }).addTo(this.map)
              .bindPopup('<b>Objectif Final :</b> NB Tech (Autoconsommation Solaire)');
             
+            // Emoji Canard (Place des Vosges) - Permanent
+            const duckIcon = L.divIcon({
+                html: '<div style="font-size:24px;">🦆</div>',
+                className: 'duck-marker-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+            L.marker([48.68490809931854, 6.187172274932828], { icon: duckIcon }).addTo(this.map).bindPopup('Place des Vosges (Pêche aux canards)');
+
+            // Emoji Poisson (Le Vélodrome) - Permanent
+            const fishIcon = L.divIcon({
+                html: '<div style="font-size:24px;">🐟</div>',
+                className: 'fish-marker-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+            L.marker([48.66594504722162, 6.165814038585626], { icon: fishIcon }).addTo(this.map).bindPopup('Le Vélodrome (Puzzle Poisson)');
+
             // Auto-resize map when window changes
             window.addEventListener('resize', () => this.map.invalidateSize());
             // Initialisation du moteur de calcul d'itinéraire
@@ -538,8 +556,10 @@ class MobiGreenManager {
     async verifyQuizAnswer() {
         const stand = stands[this.currentStandIndex];
         if (this.selectedOptionIndex === stand.bonne_reponse) {
+            if (navigator.vibrate) navigator.vibrate(40); // Petite vibration de succès
             this.onCorrectAnswer(stand);
         } else {
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Vibration d'erreur
             this.onWrongAnswer(stand);
         }
     }
@@ -639,6 +659,7 @@ class MobiGreenManager {
         const box = document.querySelector('#finalModal .glassmorphism');
 
         if (inputCode === correctCode) {
+            if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
             this.successSound.play().catch(() => {});
             this.triggerConfetti();
             feedback.textContent = "Code validé ! Génération du bilan énergétique...";
@@ -869,4 +890,49 @@ class MobiGreenManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.mobiGreenApp = new MobiGreenManager();
     window.resetMobiGreenProgress = () => window.mobiGreenApp.resetProgress();
+
+    const installAppBtn = document.getElementById('installAppBtn');
+    let deferredInstallPrompt = null;
+
+    const hideInstallButton = () => {
+        if (installAppBtn) installAppBtn.classList.add('hidden');
+    };
+
+    const showInstallButton = () => {
+        if (installAppBtn) installAppBtn.classList.remove('hidden');
+    };
+
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        hideInstallButton();
+    }
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        showInstallButton();
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+        hideInstallButton();
+    });
+
+    if (installAppBtn) {
+        installAppBtn.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice.catch(() => null);
+            deferredInstallPrompt = null;
+            hideInstallButton();
+        });
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+                console.warn('Service Worker registration failed:', error);
+            });
+        });
+    }
 });
