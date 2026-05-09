@@ -55,9 +55,9 @@ const STORY_TEXTS = {
         texte: 'Sécurité validée. Léo te donne le chiffre « 2 ».'
     },
     stand4_open: {
-        emoji: '🏁',
-        titre: 'Stand 4 : NB Tech Brabois',
-        texte: 'Bravo, tu as grimpé jusqu\'au Technopôle ! Un dernier quiz sur les bornes de recharge avant de libérer le vélo.'
+        emoji: '',
+        titre: 'Stand 4 : La Maison NB Tech',
+        texte: 'Bravo, tu as grimpé jusqu\'au Technopôle ! Tirez les ficelles de la transition pour découvrir nos solutions avant de libérer le vélo.'
     },
     stand4_done: {
         emoji: '🏁',
@@ -112,17 +112,18 @@ const stands = [
     },
     {
         id: 4,
-        emoji: "🏁",
-        title: "NB Tech",
+        emoji: "🏠",
+        title: "Stand 4 : La Maison NB Tech",
         theme_label: "Infrastructure Urbaine",
-        description: "Destination finale ! Notre système de recharge est conçu pour minimiser l'empreinte carbone. Dernière question avant d'ouvrir le cadenas.",
+        description: "Tirez les ficelles de la transition ! 🏠 Découvrez sous chaque fenêtre nos solutions : Recharge solaire extérieure pour éviter les risques en bureaux, système de parrainage et points de fidélité pour récompenser les cyclistes.",
         badge: '🏆 Champion Mobi Green',
         theme: 'theme-stand-4',
         coords: [48.65149495004919, 6.132876511821123],
-        question_quiz: "Quel type d'alimentation le système de recharge Mobi'Green intègre-t-il pour être écoresponsable ?",
-        options_reponse: ["100% réseau EDF", "Hybride solaire + réseau", "Éolien uniquement"],
+        question_quiz: "Quel est l'avantage principal de notre station de recharge extérieure ?",
+        options_reponse: ["C'est plus joli pour la décoration", "Sécuriser les bâtiments en évitant la recharge sauvage dans les bureaux", "Permettre aux vélos de prendre l'air"],
         bonne_reponse: 1,
-        chiffre_secret: "9"
+        chiffre_secret: "9",
+        hint: "Pensez aux risques d'incendie mentionnés lors de la visite INRS."
     }
 ];
 
@@ -248,7 +249,7 @@ class MobiGreenManager {
 
             // Placement immédiat du drapeau d'arrivée au CESI
             const arrivalIcon = L.divIcon({
-                html: '<div style="font-size:24px;">🏁</div>',
+                html: '<div style="font-size:24px;">🏠</div>',
                 className: 'arrival-icon',
                 iconSize: [30, 30],
                 iconAnchor: [5, 25]
