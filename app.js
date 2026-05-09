@@ -55,7 +55,7 @@ const STORY_TEXTS = {
         texte: 'Sécurité validée. Léo te donne le chiffre « 2 ».'
     },
     stand4_open: {
-        emoji: '',
+        emoji: '🏠',
         titre: 'Stand 4 : La Maison NB Tech',
         texte: 'Bravo, tu as grimpé jusqu\'au Technopôle ! Tirez les ficelles de la transition pour découvrir nos solutions avant de libérer le vélo.'
     },
@@ -90,7 +90,6 @@ const stands = [
         badge: '🧩 Expert Écosystème',
         theme: 'theme-stand-2',
         coords: [48.68490809931854, 6.187172274932828],
-        question_quiz: "Quel est l'objectif principal du site web développé avec l'ENSEM ?",
         question_quiz: "Quel est l'objectif prioritaire de la plateforme Web développée avec l'ENSEM ?",
         options_reponse: ["Réunir la communauté et promouvoir le partage de trajets.", "Vendre des vélos électriques d'occasion.", "Organiser des courses de canards."],
         bonne_reponse: 0,
@@ -516,6 +515,25 @@ class MobiGreenManager {
         if (openLockBtn) openLockBtn.addEventListener('click', () => this.verifyFinalCode());
         
         // Auto-focus final inputs
+        this.setupCadenasInputs();
+
+        // QR Code Modal
+        const shareBtn = document.getElementById('shareAppBtn');
+        const qrModal = document.getElementById('qrModal');
+        const qrImg = document.getElementById('qrCodeImg');
+        const closeQrBtn = document.getElementById('closeQrBtn');
+
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                const currentUrl = window.location.href;
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+                qrModal.classList.remove('hidden');
+            });
+        }
+        if (closeQrBtn) closeQrBtn.addEventListener('click', () => qrModal.classList.add('hidden'));
+    }
+
+    setupCadenasInputs() {
         const inputs = document.querySelectorAll('.cadenas-input');
         inputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {

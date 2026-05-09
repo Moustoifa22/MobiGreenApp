@@ -46,6 +46,13 @@
                         </div>
                     </div>
 
+                    <button id="shareAppBtn"
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white transition hover:bg-white/20 active:scale-95 mr-2">
+                        <span>🔗</span>
+                        <span class="hidden sm:inline">Partager</span>
+                    </button>
+
                     <button id="installAppBtn"
                             type="button"
                             class="hidden inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white transition hover:bg-white/20 active:scale-95">
@@ -188,6 +195,20 @@
                 Commencer →
             </button>
         </div>
+    </div>
+
+    <!-- MODALE QR CODE -->
+    <div id="qrModal" class="fixed inset-0 z-[10002] flex items-center justify-center hidden bg-black/80 backdrop-blur-md p-4">
+      <div class="glassmorphism rounded-3xl p-8 max-w-xs w-full text-center animate-story-in border-emerald-500/50">
+        <h3 class="text-xl font-bold text-white mb-4">Scanner pour suivre</h3>
+        <div class="bg-white p-4 rounded-2xl inline-block mb-4 shadow-xl">
+          <img id="qrCodeImg" src="" alt="QR Code de l'application" class="w-48 h-48" />
+        </div>
+        <p class="text-slate-300 text-xs mb-6">Partagez ce code avec les professeurs pour qu'ils rejoignent l'aventure !</p>
+        <button id="closeQrBtn" class="emerald-gradient text-white font-bold py-3 px-8 rounded-xl w-full">
+          Fermer
+        </button>
+      </div>
     </div>
 
     <!-- MODALE FINALE CADENAS -->
