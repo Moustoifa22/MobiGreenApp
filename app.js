@@ -357,7 +357,7 @@ class MobiGreenManager {
                             className: 'cicatrice-rouge'
                         }).addTo(this.map);
 
-                        redSegment.bindTooltip("⚠️ Montée Brabois — 8% à 14% (Assistance MAX)", {
+                        redSegment.bindTooltip("Zone critique : Pente de 8% à 14%", {
                             permanent: true,
                             direction: 'top',
                             className: 'relief-tooltip'
