@@ -45,8 +45,8 @@ const STORY_TEXTS = {
         texte: 'Tu maîtrises le sujet. Le chiffre « 4 » est à toi.'
     },
     stand3_open: { // Le Vélodrome
-        emoji: '🐟',
-        titre: 'Stand 3 : Le Vélodrome',
+        emoji: '🧩',
+        titre: 'Stand 3 : Défi Montée du Vélodrome',
         texte: 'On approche du plateau. Ici, on s\'occupe de la technique. La sécurité des batteries, c\'est primordial, non ?'
     },
     stand3_done: {
@@ -91,21 +91,22 @@ const stands = [
         theme: 'theme-stand-2',
         coords: [48.68490809931854, 6.187172274932828],
         question_quiz: "Quel est l'objectif principal du site web développé avec l'ENSEM ?",
+        question_quiz: "Quel est l'objectif prioritaire de la plateforme Web développée avec l'ENSEM ?",
         options_reponse: ["Réunir la communauté et promouvoir le partage de trajets.", "Vendre des vélos électriques d'occasion.", "Organiser des courses de canards."],
         bonne_reponse: 0,
         chiffre_secret: "4"
     },
     {
         id: 3,
-        emoji: "🐟",
-        title: "Le Vélodrome",
+        emoji: "🧩",
+        title: "Défi : Montée du Vélodrome",
         theme_label: "Technique & Sécurité",
-        description: "On approche du plateau. La sécurité des batteries est critique. Quelle norme encadre nos armoires de recharge ?",
+        description: "La pente s'accentue ! 🧩 Reconstituez le puzzle du 'Grand Poisson' en associant les icônes (flamme, cadenas) à leurs définitions : Sécurité thermique, Protection contre le vol et Solutions modulables pour vélos et trottinettes.",
         badge: '⚡ Maître Énergie',
         theme: 'theme-stand-3',
         coords: [48.66594504722162, 6.165814038585626],
-        question_quiz: "Quelle norme allemande encadre la sécurité thermique des armoires de recharge de batteries ?",
-        options_reponse: ["NFC 15-100", "VDMA 24994", "EN 50604-1"],
+        question_quiz: "Pourquoi utilisons-nous la Vermiculite dans nos stations de recharge ?",
+        options_reponse: ["Pour rendre le système plus lourd", "Pour isoler et contenir un risque d'incendie jusqu'à 1000°C", "Pour décorer l'intérieur des bornes"],
         bonne_reponse: 1,
         chiffre_secret: "2"
     },
