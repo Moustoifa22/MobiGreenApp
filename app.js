@@ -37,7 +37,7 @@ const STORY_TEXTS = {
     stand2_open: {
         emoji: '🦆',
         titre: 'Stand 2 : Place des Vosges',
-        texte: 'Un carrefour historique et névralgique. Sais-tu pourquoi on encourage le covélo\'tage ici ?'
+        texte: 'Préparez vos cannes ! Nous allons pêcher les concepts clés du Covélo\'tage pour découvrir comment transformer la mobilité.'
     },
     stand2_done: {
         emoji: '🔓',
@@ -85,14 +85,14 @@ const stands = [
         id: 2,
         emoji: "🦆",
         title: "Place des Vosges",
-        theme_label: "Impact Environnemental",
-        description: "Un carrefour symbolique. Les chiffres environnementaux sont alarmants. Sais-tu quel est l'impact réel des trajets sur ce territoire ?",
+        theme_label: "Collaboration & Social",
+        description: "Place à la Pêche aux Canards ! Pêchez les concepts clés du Covélo'tage dans notre bac à eau pour découvrir comment nous transformons la mobilité.",
         badge: '🧩 Expert Écosystème',
         theme: 'theme-stand-2',
         coords: [48.68490809931854, 6.187172274932828],
-        question_quiz: "Quelle quantité de CO2 les déplacements domicile-travail génèrent-ils par an sur le Technopôle ?",
-        options_reponse: ["1 500 tonnes", "9 800 tonnes", "50 000 tonnes"],
-        bonne_reponse: 1,
+        question_quiz: "Quel est l'objectif principal du site web développé avec l'ENSEM ?",
+        options_reponse: ["Réunir la communauté et promouvoir le partage de trajets.", "Vendre des vélos électriques d'occasion.", "Organiser des courses de canards."],
+        bonne_reponse: 0,
         chiffre_secret: "4"
     },
     {
