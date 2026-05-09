@@ -1,51 +1,39 @@
-const CACHE_NAME = 'mobi-green-cache-v2';
-const ASSETS_TO_CACHE = [
-	'./',
-	'./index.html',
-	'./style.css',
-	'./app.js',
-	'./manifest.json',
-	'./Logo.png',
-	'./icon-192.png',
-	'./icon-512.png'
+const CACHE_NAME = 'mobi-green-v2'; // Changez cette version pour forcer la mise à jour
+const ASSETS = [
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './Logo.png',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
-	);
-	self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
+  self.skipWaiting(); // Force le nouveau SW à s'activer sans attendre
 });
 
 self.addEventListener('activate', (event) => {
-	event.waitUntil(
-		caches.keys().then((cacheNames) => Promise.all(
-			cacheNames.map((cacheName) => {
-				if (cacheName !== CACHE_NAME) {
-					return caches.delete(cacheName);
-				}
-				return Promise.resolve();
-			})
-		))
-	);
-	self.clients.claim();
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      );
+    })
+  );
+  self.clients.claim(); // Prend le contrôle des pages immédiatement
 });
 
 self.addEventListener('fetch', (event) => {
-	if (event.request.method !== 'GET') return;
-
-	const requestUrl = new URL(event.request.url);
-	if (requestUrl.origin !== self.location.origin) return;
-
-	event.respondWith(
-		caches.match(event.request).then((cachedResponse) => {
-			if (cachedResponse) return cachedResponse;
-
-			return fetch(event.request).then((networkResponse) => {
-				const responseClone = networkResponse.clone();
-				caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-				return networkResponse;
-			}).catch(() => caches.match('./index.html'));
-		})
-	);
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
 });

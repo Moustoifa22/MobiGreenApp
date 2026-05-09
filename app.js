@@ -113,7 +113,7 @@ const stands = [
     {
         id: 4,
         emoji: "🏠",
-        title: "Stand 4 : La Maison NB Tech",
+        title: "La Maison NB Tech",
         theme_label: "Infrastructure Urbaine",
         description: "Tirez les ficelles de la transition ! 🏠 Découvrez sous chaque fenêtre nos solutions : Recharge solaire extérieure pour éviter les risques en bureaux, système de parrainage et points de fidélité pour récompenser les cyclistes.",
         badge: '🏆 Champion Mobi Green',
@@ -245,7 +245,7 @@ class MobiGreenManager {
                 iconSize: [30, 30],
                 iconAnchor: [15, 25]
             });
-            L.marker(ITINERAIRE.depart, { icon: startIcon }).addTo(this.map).bindPopup('Départ : CNAM Nancy');
+            L.marker(ITINERAIRE.depart, { icon: startIcon }).addTo(this.map).bindTooltip('Départ : CNAM Nancy', { permanent: true, direction: 'top', offset: [0, -20], className: 'stand-label' });
 
             // Placement immédiat du drapeau d'arrivée au CESI
             const arrivalIcon = L.divIcon({
@@ -255,7 +255,7 @@ class MobiGreenManager {
                 iconAnchor: [5, 25]
             });
             L.marker(ITINERAIRE.arrivee, { icon: arrivalIcon }).addTo(this.map)
-             .bindPopup('<b>Objectif Final :</b> NB Tech (Autoconsommation Solaire)');
+             .bindTooltip('Arrivée : NB Tech', { permanent: true, direction: 'top', offset: [0, -20], className: 'stand-label' });
             
             // Emoji Canard (Place des Vosges) - Permanent
             const duckIcon = L.divIcon({
@@ -264,7 +264,7 @@ class MobiGreenManager {
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
             });
-            L.marker([48.68490809931854, 6.187172274932828], { icon: duckIcon }).addTo(this.map).bindPopup('Place des Vosges (Pêche aux canards)');
+            L.marker([48.68490809931854, 6.187172274932828], { icon: duckIcon }).addTo(this.map).bindTooltip('Place des Vosges (Pêche aux canards)', { permanent: true, direction: 'top', offset: [0, -10], className: 'stand-label' });
 
             // Emoji Poisson (Le Vélodrome) - Permanent
             const fishIcon = L.divIcon({
@@ -273,7 +273,7 @@ class MobiGreenManager {
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
             });
-            L.marker([48.66594504722162, 6.165814038585626], { icon: fishIcon }).addTo(this.map).bindPopup('Le Vélodrome (Puzzle Poisson)');
+            L.marker([48.66594504722162, 6.165814038585626], { icon: fishIcon }).addTo(this.map).bindTooltip('Le Vélodrome (Puzzle Poisson)', { permanent: true, direction: 'top', offset: [0, -10], className: 'stand-label' });
 
             // Auto-resize map when window changes
             window.addEventListener('resize', () => this.map.invalidateSize());
@@ -877,8 +877,8 @@ class MobiGreenManager {
         }
     }
 
-    resetProgress() {
-        if (confirm('Êtes-vous sûr de vouloir réinitialiser la progression ? Cela effacera votre avancement.')) {
+    resetProgress(force = false) {
+        if (force || confirm('Êtes-vous sûr de vouloir réinitialiser la progression ? Cela effacera votre avancement.')) {
             localStorage.clear();
             window.location.reload();
         }
@@ -891,7 +891,7 @@ class MobiGreenManager {
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
     window.mobiGreenApp = new MobiGreenManager();
-    window.resetMobiGreenProgress = () => window.mobiGreenApp.resetProgress();
+    window.resetMobiGreenProgress = (force) => window.mobiGreenApp.resetProgress(force);
 
     const installAppBtn = document.getElementById('installAppBtn');
     let deferredInstallPrompt = null;
@@ -931,10 +931,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+        navigator.serviceWorker.register('./service-worker.js')
+            .then((registration) => {
+                // Vérifie les mises à jour en arrière-plan
+                registration.update();
+
+                registration.onupdatefound = () => {
+                    const installingWorker = registration.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Une nouvelle version est là ! On recharge.
+                            window.location.reload();
+                        }
+                    };
+                };
+            })
+            .catch((error) => {
                 console.warn('Service Worker registration failed:', error);
             });
-        });
+
+        // Recharger si le Service Worker prend le contrôle
+        navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
     }
 });

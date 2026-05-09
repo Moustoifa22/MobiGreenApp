@@ -144,6 +144,23 @@ main { -webkit-overflow-scrolling: touch; }
     overflow: hidden;
 }
 
+/* Style pour les bulles (tooltips) permanentes des stands */
+.leaflet-tooltip.stand-label {
+    background-color: rgba(15, 23, 42, 0.9) !important;
+    border: 1px solid rgba(16, 185, 129, 0.5) !important;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    white-space: nowrap;
+}
+
+.leaflet-tooltip-top.stand-label::before {
+    border-top-color: rgba(16, 185, 129, 0.5);
+}
+
 @media (min-width: 768px) {
     #map { height: 520px; }
 }
