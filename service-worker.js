@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mobi-green-v5'; // Mise à jour audio et hints
+const CACHE_NAME = 'mobi-green-v6'; // Ajustements affichage tablette
 const ASSETS = [
   './',
   './index.html',

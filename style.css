@@ -12,7 +12,7 @@ body {
     user-select: none;
     -webkit-tap-highlight-color: transparent; /* Supprime le flash gris au clic */
     -webkit-touch-callout: none; /* Désactive le menu contextuel au clic long */
-    overscroll-behavior-y: none; /* Empêche le "pull-to-refresh" du navigateur */
+    overscroll-behavior-y: auto; /* Permet le défilement fluide sur tablette et mobile */
     transition: background-color 0.8s ease;
     background:
         radial-gradient(circle at 15% 20%, rgba(16,185,129,0.12), transparent 30%),
@@ -29,6 +29,10 @@ input, textarea {
 header {
     /* Gère le padding pour les encoches (notches) en haut */
     padding-top: calc(1rem + env(safe-area-inset-top));
+}
+
+main {
+    padding-bottom: 150px; /* Assure que l'inventaire fixe ne cache pas le bas du quiz */
 }
 
 .fixed-inventory-container {
@@ -162,7 +166,8 @@ main { -webkit-overflow-scrolling: touch; }
 }
 
 @media (min-width: 768px) {
-    #map { height: 520px; }
+    #map { height: 480px; }
+    .container { max-width: 900px; }
 }
 
 /* Animation de pulsation pour le CO2 */
@@ -323,6 +328,11 @@ main { -webkit-overflow-scrolling: touch; }
 .quiz-option.selected  { border-color:#10b981; background:rgba(16,185,129,.18); color:#fff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 .quiz-option.correct   { border-color:#22c55e; background:rgba(34,197,94,.2);  color:#86efac; }
 .quiz-option.wrong     { border-color:#ef4444; background:rgba(239,68,68,.18);  color:#fca5a5; }
+
+@media (min-width: 768px) {
+    .quiz-option { font-size: 1rem; padding: 1rem 1.5rem; }
+}
+
 .quiz-option:disabled  { cursor:not-allowed; opacity:.75; }
 
 .quiz-option-letter {
