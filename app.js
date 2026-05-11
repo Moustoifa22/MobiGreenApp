@@ -79,7 +79,8 @@ const stands = [
         question_quiz: "Quelle est la part d'autosolisme (seul en voiture) vers le Technopôle ?",
         options_reponse: ["45 %", "73 %", "95 %"],
         bonne_reponse: 1,
-        chiffre_secret: "7"
+        chiffre_secret: "7",
+        hint: "C'est une grande majorité, mais pas la totalité des usagers."
     },
     {
         id: 2,
@@ -93,7 +94,8 @@ const stands = [
         question_quiz: "Quel est l'objectif prioritaire de la plateforme Web développée avec l'ENSEM ?",
         options_reponse: ["Réunir la communauté et promouvoir le partage de trajets.", "Vendre des vélos électriques d'occasion.", "Organiser des courses de canards."],
         bonne_reponse: 0,
-        chiffre_secret: "4"
+        chiffre_secret: "4",
+        hint: "Le Covélo'tage est avant tout une question d'entraide et de réseau."
     },
     {
         id: 3,
@@ -107,7 +109,8 @@ const stands = [
         question_quiz: "Quelle est l'utilité de la Vermiculite dans la protection contre les incendies ?",
         options_reponse: ["Pour rendre le système plus lourd", "Pour isoler et contenir un risque d'incendie jusqu'à 1000°C", "Pour décorer l'intérieur des bornes"],
         bonne_reponse: 1,
-        chiffre_secret: "2"
+        chiffre_secret: "2",
+        hint: "Ce minéral est utilisé pour ses propriétés isolantes exceptionnelles."
     },
     {
         id: 4,
@@ -634,15 +637,15 @@ class MobiGreenManager {
         
         const buttons = this.quizOptions.querySelectorAll('.quiz-option');
         buttons[this.selectedOptionIndex].classList.add('wrong');
-        buttons[stand.bonne_reponse].classList.add('correct');
         buttons.forEach(b => b.disabled = true);
         
-        this.feedbackMsg.textContent = "Rayan te conseille de bien relire la question. Réessaie dans un instant !";
-        this.feedbackMsg.className = "rounded-xl px-4 py-3 text-sm font-medium mb-4 bg-red-500/20 text-red-300 block";
+        const hintText = stand.hint ? `💡 Indice : ${stand.hint}` : "Rayan te conseille de bien relire la question. Réessaie !";
+        this.feedbackMsg.textContent = hintText;
+        this.feedbackMsg.className = "rounded-xl px-4 py-3 text-sm font-medium mb-4 bg-red-500/20 text-red-300 block text-center";
 
         setTimeout(() => {
             this.renderQuiz(stand);
-        }, 2500);
+        }, 3000);
     }
 
     playSuccessSound() {
