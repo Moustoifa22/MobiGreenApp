@@ -104,7 +104,7 @@ const stands = [
         badge: '⚡ Maître Énergie',
         theme: 'theme-stand-3',
         coords: [48.66594504722162, 6.165814038585626],
-        question_quiz: "Pourquoi utilisons-nous la Vermiculite dans nos stations de recharge ?",
+        question_quiz: "Quelle est l'utilité de la Vermiculite dans la protection contre les incendies ?",
         options_reponse: ["Pour rendre le système plus lourd", "Pour isoler et contenir un risque d'incendie jusqu'à 1000°C", "Pour décorer l'intérieur des bornes"],
         bonne_reponse: 1,
         chiffre_secret: "2"
