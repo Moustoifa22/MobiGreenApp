@@ -32,7 +32,7 @@ const STORY_TEXTS = {
     stand1_done: {
         emoji: '🔓',
         titre: 'Premier chiffre obtenu !',
-        texte: 'Excellent début. Léo note le chiffre « 7 » pour toi.'
+        texte: 'Excellent début. Rayan note le chiffre « 7 » pour toi.'
     },
     stand2_open: {
         emoji: '🦆',
@@ -52,7 +52,7 @@ const STORY_TEXTS = {
     stand3_done: {
         emoji: '🔓',
         titre: 'Troisième chiffre !',
-        texte: 'Sécurité validée. Léo te donne le chiffre « 2 ».'
+        texte: 'Sécurité validée. Rayan te donne le chiffre « 2 ».'
     },
     stand4_open: {
         emoji: '🏠',
@@ -418,13 +418,16 @@ class MobiGreenManager {
 
         // Gestion du grossissement du vélo et de la batterie
         const bikeElement = this.marker.getElement();
+        
+        // Niveaux de batterie demandés : Stand 1: 100%, Stand 2: 80%, Stand 3: 40%, Stand 4: 5%
+        const batteryLevels = [100, 80, 40, 5];
+        const currentLevel = batteryLevels[this.currentStandIndex] ?? 5;
+        this.updateBatteryUI(currentLevel);
+
         if (bikeElement) {
-            if (this.currentStandIndex === 3) { // Arrivée après la zone rouge
+            // Effet "effort" (bike-climbing) activé pour la montée (Stand 3) et l'arrivée (Stand 4)
+            if (this.currentStandIndex >= 2) {
                 bikeElement.classList.add('bike-climbing');
-                this.updateBatteryUI(30); // Chute brutale pour la montée
-            } else if (this.currentStandIndex === 2) {
-                bikeElement.classList.remove('bike-climbing');
-                this.updateBatteryUI(80); // Consommation normale
             } else {
                 bikeElement.classList.remove('bike-climbing');
             }
@@ -440,8 +443,23 @@ class MobiGreenManager {
 
     updateBatteryUI(value) {
         this.battery = value;
-        document.getElementById('batteryPercentage').textContent = `${value}%`;
-        document.getElementById('batteryBar').style.width = `${value}%`;
+        const percentageEl = document.getElementById('batteryPercentage');
+        const barEl = document.getElementById('batteryBar');
+
+        if (percentageEl) {
+            percentageEl.textContent = `${value}%`;
+            // Change la couleur du texte en rouge si la batterie est basse
+            if (value <= 5) percentageEl.className = 'text-[10px] font-mono text-red-500';
+            else percentageEl.className = 'text-[10px] font-mono text-emerald-400';
+        }
+
+        if (barEl) {
+            barEl.style.width = `${value}%`;
+            // Ajoute la classe de clignotement si la batterie est à 5%
+            if (value <= 5) barEl.classList.add('battery-low');
+            else barEl.classList.remove('battery-low');
+        }
+
         this.saveProgress();
     }
 
@@ -619,7 +637,7 @@ class MobiGreenManager {
         buttons[stand.bonne_reponse].classList.add('correct');
         buttons.forEach(b => b.disabled = true);
         
-        this.feedbackMsg.textContent = "Léo te conseille de bien relire la question. Réessaie dans un instant !";
+        this.feedbackMsg.textContent = "Rayan te conseille de bien relire la question. Réessaie dans un instant !";
         this.feedbackMsg.className = "rounded-xl px-4 py-3 text-sm font-medium mb-4 bg-red-500/20 text-red-300 block";
 
         setTimeout(() => {
@@ -704,7 +722,7 @@ class MobiGreenManager {
         } else {
             this.errorSound.play().catch(() => {});
             box.classList.add('shake-animation');
-            feedback.textContent = "Le cadenas résiste... Es-tu sûr des chiffres de Léo ?";
+            feedback.textContent = "Le cadenas résiste... Es-tu sûr des chiffres de Rayan ?";
             feedback.className = "rounded-xl px-4 py-3 text-sm font-medium mb-4 bg-red-500/20 text-red-300 block";
             
             const inputs = document.querySelectorAll('.cadenas-input');

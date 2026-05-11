@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mobi-green-v2'; // Changez cette version pour forcer la mise à jour
+const CACHE_NAME = 'mobi-green-v3'; // Mise à jour pour les paliers de batterie
 const ASSETS = [
   './',
   './index.html',

@@ -397,3 +397,15 @@ main { -webkit-overflow-scrolling: touch; }
 .relief-tooltip.max-slope:before {
     border-top-color: #7f1d1d;
 }
+
+/* ── Animation de batterie faible (Clignotement Rouge) ── */
+@keyframes battery-flash {
+    0%   { background-color: #ef4444; box-shadow: 0 0 5px #ef4444; }
+    50%  { background-color: #7f1d1d; box-shadow: 0 0 15px #7f1d1d; }
+    100% { background-color: #ef4444; box-shadow: 0 0 5px #ef4444; }
+}
+
+.battery-low {
+    animation: battery-flash 0.8s infinite ease-in-out !important;
+    background-color: #ef4444 !important;
+}
