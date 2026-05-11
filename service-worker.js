@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mobi-green-v3'; // Mise à jour pour les paliers de batterie
+const CACHE_NAME = 'mobi-green-v5'; // Mise à jour audio et hints
 const ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,8 @@ const ASSETS = [
   './manifest.json',
   './Logo.png',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './note-totem.mp3'
 ];
 
 self.addEventListener('install', (event) => {

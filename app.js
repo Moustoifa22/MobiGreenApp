@@ -180,6 +180,10 @@ class MobiGreenManager {
         // Audio assets (Sons système légers)
         this.successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
         this.errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
+        // Musique de victoire (Note Totem)
+        this.victoryMusic = new Audio('./note-totem.mp3');
+        this.victoryMusic.preload = 'auto';
+        this.victoryMusic.load();
 
         this.init();
         this.renderProgressSteps();
@@ -702,6 +706,7 @@ class MobiGreenManager {
         if (inputCode === correctCode) {
             if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
             this.successSound.play().catch(() => {});
+            this.victoryMusic.play().catch(() => {}); // Lancement de la musique Note Totem
             this.triggerConfetti();
             feedback.textContent = "Code validé ! Génération du bilan énergétique...";
             feedback.className = "rounded-xl px-4 py-3 text-sm font-medium mb-4 bg-emerald-500/20 text-emerald-300 block";
@@ -918,6 +923,7 @@ class MobiGreenManager {
 
     resetProgress(force = false) {
         if (force || confirm('Êtes-vous sûr de vouloir réinitialiser la progression ? Cela effacera votre avancement.')) {
+            if (this.victoryMusic) this.victoryMusic.pause();
             localStorage.clear();
             window.location.reload();
         }
