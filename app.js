@@ -21,8 +21,8 @@ const ITINERAIRE = {
 const STORY_TEXTS = {
     intro: {
         emoji: '🚴',
-        titre: 'Mobi\'Green avec Léo',
-        texte: 'Salut ! Moi c\'est Léo, cycliste aguerri. Je vais t\'escorter pour ton trajet vers le Technopôle. À chaque étape, réponds bien pour obtenir un chiffre du cadenas de ton vélo !'
+        titre: 'Mobi\'Green avec Rayan',
+        texte: 'Salut ! Moi c\'est Rayan, cycliste aguerri. Je vais t\'escorter pour ton trajet vers le Technopôle. À chaque étape, réponds bien pour obtenir un chiffre du cadenas de ton vélo !'
     },
     stand1_open: {
         emoji: '🏫',
@@ -72,7 +72,7 @@ const stands = [
         emoji: "🏫",
         title: "CNAM Nancy",
         theme_label: "Mobilité Partagée",
-        description: "Bienvenue ! Nous commençons notre trajet. Sur ce Technopôle, 20 000 personnes se déplacent chaque jour. Pour obtenir le 1er chiffre, réponds à cette question sur l'état des lieux.",
+        description: "Bienvenue ! Nous commençons notre trajet destination : Le Technopôle de Nancy Brabois. Sur ce Technopôle, 20 000 personnes se déplacent chaque jour. Pour obtenir le 1er chiffre, réponds à cette question sur l'état des lieux.",
         badge: '🛡️ Gardien de l\'Eau',
         theme: 'theme-stand-1',
         coords: [48.68223767249223, 6.190326552770215],
